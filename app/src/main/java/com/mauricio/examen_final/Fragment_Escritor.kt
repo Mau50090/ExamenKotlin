@@ -31,6 +31,7 @@ class Fragment_Escritor : Fragment() {
     var gson:Gson = Gson()
     var idescritor:Int = 0
     var j: Int = 0
+    var idEscritor:Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,13 +42,8 @@ class Fragment_Escritor : Fragment() {
         val v = inflater.inflate(R.layout.fragment__escritor, container, false)
         val btnactua = v.findViewById<Button>(R.id.btn_MandarActualizar)
         val btncrear = v.findViewById<Button>(R.id.btn_MandarCrear)
-        val btnmas = v.findViewById<Button>(R.id.btn_EscritorMas)
-        val btnmenos = v.findViewById<Button>(R.id.btn_EscritorMenos)
         val transaccion: FragmentTransaction = requireFragmentManager().beginTransaction()
 
-            btnmas.setOnClickListener {
-
-            }
 
         btnactua.setOnClickListener {
             val Fragment_Edit = Fragment_Edit()
@@ -76,39 +72,19 @@ class Fragment_Escritor : Fragment() {
         arregloEscritores.add(escritor3)
 
         if (arguments != null){
-            val idEscritor = requireArguments().getInt("numEsc")
+            idEscritor = requireArguments().getInt("numEsc")
             this.idescritor = idEscritor
             val json1 = requireArguments().getString("LibroStephen")
-            val json2 = requireArguments().getString("LibroStephen")
-            val json3 = requireArguments().getString("LibroStephen")
+            val json2 = requireArguments().getString("LibroKafka")
+            val json3 = requireArguments().getString("LibroStan")
             val idEscritorNuevo = requireArguments().getInt("LibroNuevo")
             val escritorType = object : TypeToken<ArrayList<Escritor>>() {}.type
 
                 if(json1!=null || json2!=null || json3!=null){
                     if (idEscritorNuevo == 0) {
+                        idescritor = idEscritorNuevo
                         var libroStephen: LibroStephen = gson.fromJson(json1, LibroStephen::class.java)
-                        if(loadStephen() != null) {
-                            btn_EscritorMas.setOnClickListener {
-                                j++
-                                if(j  > loadStephen()!!.lastIndex){j=0}
-                                if (loadStephen()!!.lastIndex >= j){
-                                    imgv_PortadaEscritor.setImageResource(loadStephen()!![j].portada)
-                                    txtv_TituloEscritor.text = loadStephen()!![j].titulo
-                                }
-                                println(j)
-                                println(loadStephen()!![j].titulo)
-                            }
 
-                            btn_EscritorMenos.setOnClickListener {
-                                j--
-                                if (j < 0){j = loadStephen()!!.lastIndex}
-                                if (loadStephen()!!.lastIndex >= j){
-                                    imgv_PortadaEscritor.setImageResource(loadStephen()!![j].portada)
-                                    txtv_TituloEscritor.text = loadStephen()!![j].titulo
-                                }
-                                println(j)
-                            }
-                        }
                         if (loadStephen().isNullOrEmpty()){
                             arregloAxuliarStephen?.add(libroStephen)
                             val jsonArreglo = gson.toJson(arregloAxuliarStephen)
@@ -120,29 +96,9 @@ class Fragment_Escritor : Fragment() {
                             saveNewLibroKing(jsonArreglo)
                         }
                     }else if(idEscritorNuevo == 1){
+                        idescritor = idEscritorNuevo
                         var libroKafka :LibroKafka = gson.fromJson(json2, LibroKafka::class.java)
-                        if(loadKafka() != null) {
-                            btn_EscritorMas.setOnClickListener {
-                                j++
-                                if(j  > loadKafka()!!.lastIndex){j=0}
-                                if (loadKafka()!!.lastIndex >= j){
-                                    imgv_PortadaEscritor.setImageResource(loadKafka()!![j].portada)
-                                    txtv_TituloEscritor.text = loadKafka()!![j].titulo
-                                }
-                                println(j)
-                                println(loadKafka()!![j].titulo)
-                            }
 
-                            btn_EscritorMenos.setOnClickListener {
-                                j--
-                                if (j < 0){j = loadKafka()!!.lastIndex}
-                                if (loadKafka()!!.lastIndex >= j){
-                                    imgv_PortadaEscritor.setImageResource(loadKafka()!![j].portada)
-                                    txtv_TituloEscritor.text = loadKafka()!![j].titulo
-                                }
-                                println(j)
-                            }
-                        }
                         if (loadKafka().isNullOrEmpty()){
                             arregloAxuliarKafka?.add(libroKafka)
                             val jsonArreglo = gson.toJson(arregloAxuliarKafka)
@@ -153,12 +109,27 @@ class Fragment_Escritor : Fragment() {
                             val jsonArreglo = gson.toJson(arregloAxuliarKafka)
                             saveNewLibroKafka(jsonArreglo)
                         }
+                    }else if(idEscritorNuevo == 2) {
+                        idescritor = idEscritorNuevo
+                        var libroStan: LibroStan = gson.fromJson(json3, LibroStan::class.java)
+
+                        if (loadStant().isNullOrEmpty()) {
+                            arregloAxuliarStan?.add(libroStan)
+                            val jsonArreglo = gson.toJson(arregloAxuliarStan)
+                            saveNewLibroStant(jsonArreglo)
+                        } else {
+                            arregloAxuliarStan = loadStant()
+                            arregloAxuliarStan?.add(libroStan)
+                            val jsonArreglo = gson.toJson(arregloAxuliarStan)
+                            saveNewLibroStant(jsonArreglo)
+                        }
                     }
                 }
-
-            if (idEscritor == 0){
+            //Se debe de cambiar idEscritorio por el que regrese el otro fragment
+            if (idescritor == 0){
                 imgv_FotoEscritor.setImageResource(arregloEscritores[0].img)
                 txt_Escritor.text = arregloEscritores[0].userName
+
                     if(loadStephen() != null) {
                         btn_EscritorMas.setOnClickListener {
                             j++
@@ -167,8 +138,6 @@ class Fragment_Escritor : Fragment() {
                                 imgv_PortadaEscritor.setImageResource(loadStephen()!![j].portada)
                                 txtv_TituloEscritor.text = loadStephen()!![j].titulo
                             }
-                            println(j)
-                            println(loadStephen()!![j].titulo)
                         }
 
                         btn_EscritorMenos.setOnClickListener {
@@ -178,15 +147,56 @@ class Fragment_Escritor : Fragment() {
                                 imgv_PortadaEscritor.setImageResource(loadStephen()!![j].portada)
                                 txtv_TituloEscritor.text = loadStephen()!![j].titulo
                             }
-                            println(j)
                         }
                     }
-            }else  if (idEscritor == 1){
+
+            }else  if (idescritor == 1){
                 imgv_FotoEscritor.setImageResource(arregloEscritores[1].img)
                 txt_Escritor.text = arregloEscritores[1].userName
-            }else  if (idEscritor == 2){
+
+                if(loadKafka() != null) {
+                    btn_EscritorMas.setOnClickListener {
+                        j++
+                        if(j  > loadKafka()!!.lastIndex){j=0}
+                        if (loadKafka()!!.lastIndex >= j){
+                            imgv_PortadaEscritor.setImageResource(loadKafka()!![j].portada)
+                            txtv_TituloEscritor.text = loadKafka()!![j].titulo
+                        }
+                    }
+
+                    btn_EscritorMenos.setOnClickListener {
+                        j--
+                        if (j < 0){j = loadKafka()!!.lastIndex}
+                        if (loadKafka()!!.lastIndex >= j){
+                            imgv_PortadaEscritor.setImageResource(loadKafka()!![j].portada)
+                            txtv_TituloEscritor.text = loadKafka()!![j].titulo
+                        }
+                    }
+                }
+
+            }else  if (idescritor == 2){
                 imgv_FotoEscritor.setImageResource(arregloEscritores[2].img)
                 txt_Escritor.text = arregloEscritores[2].userName
+
+                if(loadStant() != null) {
+                    btn_EscritorMas.setOnClickListener {
+                        j++
+                        if(j  > loadStant()!!.lastIndex){j=0}
+                        if (loadStant()!!.lastIndex >= j){
+                            imgv_PortadaEscritor.setImageResource(loadStant()!![j].portada)
+                            txtv_TituloEscritor.text = loadStant()!![j].titulo
+                        }
+                    }
+
+                    btn_EscritorMenos.setOnClickListener {
+                        j--
+                        if (j < 0){j = loadStant()!!.lastIndex}
+                        if (loadStant()!!.lastIndex >= j){
+                            imgv_PortadaEscritor.setImageResource(loadStant()!![j].portada)
+                            txtv_TituloEscritor.text = loadStant()!![j].titulo
+                        }
+                    }
+                }
             }
         }
     }

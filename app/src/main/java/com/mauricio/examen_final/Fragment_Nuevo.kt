@@ -84,6 +84,7 @@ class Fragment_Nuevo : Fragment() {
             val Fragment_Escritor = Fragment_Escritor()
             val transaccion : FragmentTransaction = requireFragmentManager().beginTransaction()
             bundle.putInt("LibroNuevo", idDelEscritor)
+
             if (idDelEscritor == 0){
                 val libroNuevo :LibroStephen = LibroStephen(txtDescripcion.text.toString(), arregloPortadas[i], txtTitulo.text.toString())
                 val jsonStephen:String = gson.toJson(libroNuevo)
@@ -109,6 +110,7 @@ class Fragment_Nuevo : Fragment() {
         if(arguments != null){
 
             idDelEscritor = requireArguments().getInt("idEscritorActual")
+            println("Este es el id que se recive en nuevo" + idDelEscritor)
         }
     }
 }
