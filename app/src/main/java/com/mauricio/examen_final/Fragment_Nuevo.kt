@@ -22,7 +22,7 @@ class Fragment_Nuevo : Fragment() {
 
     var i =0
     val arregloPortadas: ArrayList<Int> = ArrayList()
-
+    var idDelEscritor:Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,7 +44,8 @@ class Fragment_Nuevo : Fragment() {
         arregloPortadas.add(R.drawable.terror)
 
         btnmas.setOnClickListener {
-
+            i++
+            if(i>4){i=0}
             if (i == 0){
                 imgv_PortadasNuevo.setImageResource(arregloPortadas[i])
             }else if (i == 1){
@@ -56,14 +57,12 @@ class Fragment_Nuevo : Fragment() {
             }else if (i == 4){
                 imgv_PortadasNuevo.setImageResource(arregloPortadas[i])
             }
-            i++
-            if(i>=5){i=0}
+            println(i)
         }
 
         btn_menos.setOnClickListener {
-
             i--
-            if(i<=-1){i=4}
+            if (i < 0 ){i = 4}
             if (i == 0){
                 imgv_PortadasNuevo.setImageResource(arregloPortadas[i])
             }else if (i == 1){
@@ -75,19 +74,29 @@ class Fragment_Nuevo : Fragment() {
             }else if (i == 4){
                 imgv_PortadasNuevo.setImageResource(arregloPortadas[i])
             }
+            println(i)
         }
 
         btn_nuevo.setOnClickListener {
 
             var gson: Gson = Gson()
-
-            val libroNuevo :LibroStephen = LibroStephen(arregloPortadas[i - 1], txtTitulo.text.toString(),txtDescripcion.text.toString())
-
-            val jsonStephen:String = gson.toJson(libroNuevo)
             val bundle = Bundle()
-            val transaccion : FragmentTransaction = requireFragmentManager().beginTransaction()
-            bundle.putString("LibroStephen", jsonStephen)
             val Fragment_Escritor = Fragment_Escritor()
+            val transaccion : FragmentTransaction = requireFragmentManager().beginTransaction()
+            bundle.putInt("LibroNuevo", idDelEscritor)
+            if (idDelEscritor == 0){
+                val libroNuevo :LibroStephen = LibroStephen(txtDescripcion.text.toString(), arregloPortadas[i], txtTitulo.text.toString())
+                val jsonStephen:String = gson.toJson(libroNuevo)
+                bundle.putString("LibroStephen", jsonStephen)
+            }else if (idDelEscritor == 1){
+                val libroNuevo :LibroKafka = LibroKafka(txtDescripcion.text.toString(), arregloPortadas[i], txtTitulo.text.toString())
+                val jsonKafka:String = gson.toJson(libroNuevo)
+                bundle.putString("LibroKafka", jsonKafka)
+            }else if(idDelEscritor == 2){
+                val libroNuevo :LibroStan = LibroStan(txtDescripcion.text.toString(), arregloPortadas[i], txtTitulo.text.toString())
+                val jsonStan:String = gson.toJson(libroNuevo)
+                bundle.putString("LibroStan", jsonStan)
+            }
             Fragment_Escritor.arguments = bundle
             transaccion.replace(R.id.mainActivity,Fragment_Escritor).addToBackStack(null)
             transaccion.commit()
@@ -95,4 +104,11 @@ class Fragment_Nuevo : Fragment() {
         return v
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        if(arguments != null){
+
+            idDelEscritor = requireArguments().getInt("idEscritorActual")
+        }
+    }
 }

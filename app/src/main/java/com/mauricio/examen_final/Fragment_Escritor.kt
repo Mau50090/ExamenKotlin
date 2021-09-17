@@ -22,12 +22,15 @@ class Fragment_Escritor : Fragment() {
     var escritor2 : Escritor = Escritor(1,"kafka","12345",R.drawable.kafka)
     var escritor3 : Escritor = Escritor(2, "stanlee","12345",R.drawable.stan)
 
-    var arreglojson :String = ""
-    var arregloAxuliarStephen :MutableList<LibroStephen> = mutableListOf<LibroStephen>()
-    val TypeLibroStephen = object :TypeToken<MutableList<LibroStephen>>() {}.type
-    var gson:Gson = Gson()
-    var j: Int = 0
+    var arregloAxuliarStephen :MutableList<LibroStephen>? = mutableListOf<LibroStephen>()
+    var arregloAxuliarKafka :MutableList<LibroKafka>? = mutableListOf<LibroKafka>()
+    var arregloAxuliarStan :MutableList<LibroStan>? = mutableListOf<LibroStan>()
 
+    val TypeLibroStephen = object :TypeToken<MutableList<LibroStephen>>() {}.type
+
+    var gson:Gson = Gson()
+    var idescritor:Int = 0
+    var j: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,6 +57,10 @@ class Fragment_Escritor : Fragment() {
 
         btncrear.setOnClickListener {
             val Fragment_Nuevo = Fragment_Nuevo()
+            val bundle = Bundle()
+            bundle.putInt("idEscritorActual", idescritor)
+            Fragment_Nuevo.arguments = bundle
+
             transaccion.replace(R.id.mainActivity, Fragment_Nuevo).addToBackStack(null)
             transaccion.commit()
         }
@@ -70,11 +77,110 @@ class Fragment_Escritor : Fragment() {
 
         if (arguments != null){
             val idEscritor = requireArguments().getInt("numEsc")
+            this.idescritor = idEscritor
+            val json1 = requireArguments().getString("LibroStephen")
+            val json2 = requireArguments().getString("LibroStephen")
+            val json3 = requireArguments().getString("LibroStephen")
+            val idEscritorNuevo = requireArguments().getInt("LibroNuevo")
             val escritorType = object : TypeToken<ArrayList<Escritor>>() {}.type
+
+                if(json1!=null || json2!=null || json3!=null){
+                    if (idEscritorNuevo == 0) {
+                        var libroStephen: LibroStephen = gson.fromJson(json1, LibroStephen::class.java)
+                        if(loadStephen() != null) {
+                            btn_EscritorMas.setOnClickListener {
+                                j++
+                                if(j  > loadStephen()!!.lastIndex){j=0}
+                                if (loadStephen()!!.lastIndex >= j){
+                                    imgv_PortadaEscritor.setImageResource(loadStephen()!![j].portada)
+                                    txtv_TituloEscritor.text = loadStephen()!![j].titulo
+                                }
+                                println(j)
+                                println(loadStephen()!![j].titulo)
+                            }
+
+                            btn_EscritorMenos.setOnClickListener {
+                                j--
+                                if (j < 0){j = loadStephen()!!.lastIndex}
+                                if (loadStephen()!!.lastIndex >= j){
+                                    imgv_PortadaEscritor.setImageResource(loadStephen()!![j].portada)
+                                    txtv_TituloEscritor.text = loadStephen()!![j].titulo
+                                }
+                                println(j)
+                            }
+                        }
+                        if (loadStephen().isNullOrEmpty()){
+                            arregloAxuliarStephen?.add(libroStephen)
+                            val jsonArreglo = gson.toJson(arregloAxuliarStephen)
+                            saveNewLibroKing(jsonArreglo)
+                        }else{
+                            arregloAxuliarStephen = loadStephen()
+                            arregloAxuliarStephen?.add(libroStephen)
+                            val jsonArreglo = gson.toJson(arregloAxuliarStephen)
+                            saveNewLibroKing(jsonArreglo)
+                        }
+                    }else if(idEscritorNuevo == 1){
+                        var libroKafka :LibroKafka = gson.fromJson(json2, LibroKafka::class.java)
+                        if(loadKafka() != null) {
+                            btn_EscritorMas.setOnClickListener {
+                                j++
+                                if(j  > loadKafka()!!.lastIndex){j=0}
+                                if (loadKafka()!!.lastIndex >= j){
+                                    imgv_PortadaEscritor.setImageResource(loadKafka()!![j].portada)
+                                    txtv_TituloEscritor.text = loadKafka()!![j].titulo
+                                }
+                                println(j)
+                                println(loadKafka()!![j].titulo)
+                            }
+
+                            btn_EscritorMenos.setOnClickListener {
+                                j--
+                                if (j < 0){j = loadKafka()!!.lastIndex}
+                                if (loadKafka()!!.lastIndex >= j){
+                                    imgv_PortadaEscritor.setImageResource(loadKafka()!![j].portada)
+                                    txtv_TituloEscritor.text = loadKafka()!![j].titulo
+                                }
+                                println(j)
+                            }
+                        }
+                        if (loadKafka().isNullOrEmpty()){
+                            arregloAxuliarKafka?.add(libroKafka)
+                            val jsonArreglo = gson.toJson(arregloAxuliarKafka)
+                            saveNewLibroKafka(jsonArreglo)
+                        }else{
+                            arregloAxuliarKafka = loadKafka()
+                            arregloAxuliarKafka?.add(libroKafka)
+                            val jsonArreglo = gson.toJson(arregloAxuliarKafka)
+                            saveNewLibroKafka(jsonArreglo)
+                        }
+                    }
+                }
 
             if (idEscritor == 0){
                 imgv_FotoEscritor.setImageResource(arregloEscritores[0].img)
                 txt_Escritor.text = arregloEscritores[0].userName
+                    if(loadStephen() != null) {
+                        btn_EscritorMas.setOnClickListener {
+                            j++
+                            if(j  > loadStephen()!!.lastIndex){j=0}
+                            if (loadStephen()!!.lastIndex >= j){
+                                imgv_PortadaEscritor.setImageResource(loadStephen()!![j].portada)
+                                txtv_TituloEscritor.text = loadStephen()!![j].titulo
+                            }
+                            println(j)
+                            println(loadStephen()!![j].titulo)
+                        }
+
+                        btn_EscritorMenos.setOnClickListener {
+                            j--
+                            if (j < 0){j = loadStephen()!!.lastIndex}
+                            if (loadStephen()!!.lastIndex >= j){
+                                imgv_PortadaEscritor.setImageResource(loadStephen()!![j].portada)
+                                txtv_TituloEscritor.text = loadStephen()!![j].titulo
+                            }
+                            println(j)
+                        }
+                    }
             }else  if (idEscritor == 1){
                 imgv_FotoEscritor.setImageResource(arregloEscritores[1].img)
                 txt_Escritor.text = arregloEscritores[1].userName
@@ -86,12 +192,12 @@ class Fragment_Escritor : Fragment() {
     }
 
 
-    fun saveNewStephen(json:String){
+    fun saveNewLibroKing(json:String){
         if (json != null) {
             val pref = PreferenceManager.getDefaultSharedPreferences(requireContext())
             val editor = pref.edit()
 
-            editor.putString("JSON", json).apply()
+            editor.putString("JSONKING", json).apply()
             val toast = Toast.makeText(requireContext(), "Se creo nuevo Libro", Toast.LENGTH_LONG)
             toast.setGravity(Gravity.TOP, 0, 140)
             toast.show()
@@ -102,17 +208,81 @@ class Fragment_Escritor : Fragment() {
         }
     }
 
-    fun loadStephen(): MutableList<LibroStephen>{
-        var json:String
+    fun saveNewLibroKafka(json:String){
+        if (json != null) {
+            val pref = PreferenceManager.getDefaultSharedPreferences(requireContext())
+            val editor = pref.edit()
+
+            editor.putString("JSONKAFKA", json).apply()
+            val toast = Toast.makeText(requireContext(), "Se creo nuevo Libro", Toast.LENGTH_LONG)
+            toast.setGravity(Gravity.TOP, 0, 140)
+            toast.show()
+        }else{
+            val toast = Toast.makeText(requireContext(), "No creo nuevo Libro", Toast.LENGTH_LONG)
+            toast.setGravity(Gravity.TOP, 0, 140)
+            toast.show()
+        }
+    }
+
+    fun saveNewLibroStant(json:String){
+        if (json != null) {
+            val pref = PreferenceManager.getDefaultSharedPreferences(requireContext())
+            val editor = pref.edit()
+
+            editor.putString("JSONSTANT", json).apply()
+            val toast = Toast.makeText(requireContext(), "Se creo nuevo Libro", Toast.LENGTH_LONG)
+            toast.setGravity(Gravity.TOP, 0, 140)
+            toast.show()
+        }else{
+            val toast = Toast.makeText(requireContext(), "No creo nuevo Libro", Toast.LENGTH_LONG)
+            toast.setGravity(Gravity.TOP, 0, 140)
+            toast.show()
+        }
+    }
+
+    fun loadStephen(): MutableList<LibroStephen>? {
+        var json:String?
         val pref = PreferenceManager.getDefaultSharedPreferences(requireContext())
+        var arregloStephen :MutableList<LibroStephen>?
 
         pref.apply {
-            json = getString("JSON", arreglojson).toString()
+            json = getString("JSONKING", null).toString()
         }
 
         val StephenType = object :TypeToken<MutableList<LibroStephen>>() {}.type
-        var arregloStephen :MutableList<LibroStephen> = gson.fromJson<ArrayList<LibroStephen>>(json, StephenType)
+        arregloStephen = gson.fromJson(json, StephenType)
 
         return arregloStephen
     }
+
+    fun loadKafka(): MutableList<LibroKafka>? {
+        var json:String?
+        val pref = PreferenceManager.getDefaultSharedPreferences(requireContext())
+        var arregloKafka :MutableList<LibroKafka>?
+
+        pref.apply {
+            json = getString("JSONKAFKA", null).toString()
+        }
+
+        val KafkaType = object :TypeToken<MutableList<LibroKafka>>() {}.type
+        arregloKafka = gson.fromJson(json, KafkaType)
+
+        return arregloKafka
+    }
+
+    fun loadStant(): MutableList<LibroStan>? {
+        var json:String?
+        val pref = PreferenceManager.getDefaultSharedPreferences(requireContext())
+        var arregloStan :MutableList<LibroStan>?
+
+        pref.apply {
+            json = getString("JSONSTANT", null).toString()
+        }
+
+        val StanType = object :TypeToken<MutableList<LibroStan>>() {}.type
+        arregloStan = gson.fromJson(json, StanType)
+
+        return arregloStan
+    }
 }
+
