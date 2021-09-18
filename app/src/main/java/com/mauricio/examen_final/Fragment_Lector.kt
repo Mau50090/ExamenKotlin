@@ -48,7 +48,8 @@ class Fragment_Lector : Fragment() {
 
         val imgFav = v.findViewById<ImageView>(R.id.imgv_Fav)
         imgFav.setImageResource(R.drawable.corazonnegro)
-
+        if (arguments!=null){
+        }
         return  v
     }
 
@@ -60,8 +61,7 @@ class Fragment_Lector : Fragment() {
         arregloLectores.add(lector3)
 
         if (arguments != null){
-
-            val idLectores = requireArguments().getInt("numLec")
+            var idLectores = requireArguments().getInt("numLec")
 
             if (idLectores == 0){
                 imgv_FotoLector.setImageResource(arregloLectores[0].img)
@@ -69,7 +69,7 @@ class Fragment_Lector : Fragment() {
 
                 if (loadFavSheldon().isNullOrEmpty()){
                     if (memoria.loadKafka(requireContext()).isNullOrEmpty() || memoria.loadStant(requireContext()).isNullOrEmpty()||memoria.loadStephen(requireContext()).isNullOrEmpty()){
-                        val toast = Toast.makeText(requireContext(), "Que tal si tratas creando libros primero", Toast.LENGTH_LONG)
+                        val toast = Toast.makeText(requireContext(), "Que tal si tratas creando libros de todos los escritores para que tengas variedad", Toast.LENGTH_LONG)
                         toast.setGravity(Gravity.TOP, 0, 140)
                         toast.show()
                         val fragment_LogIn = LogIn()
@@ -96,7 +96,7 @@ class Fragment_Lector : Fragment() {
 
                 if (loadFavMichael().isNullOrEmpty()){
                     if (memoria.loadKafka(requireContext()).isNullOrEmpty() || memoria.loadStant(requireContext()).isNullOrEmpty()||memoria.loadStephen(requireContext()).isNullOrEmpty()){
-                        val toast = Toast.makeText(requireContext(), "Que tal si tratas creando libros primero", Toast.LENGTH_LONG)
+                        val toast = Toast.makeText(requireContext(), "Que tal si tratas creando libros de todos los escritores para que tengas variedad", Toast.LENGTH_LONG)
                         toast.setGravity(Gravity.TOP, 0, 140)
                         toast.show()
                         val fragment_LogIn = LogIn()
@@ -124,7 +124,7 @@ class Fragment_Lector : Fragment() {
 
                 if (loadFavPenny().isNullOrEmpty()){
                     if (memoria.loadKafka(requireContext()).isNullOrEmpty() || memoria.loadStant(requireContext()).isNullOrEmpty()||memoria.loadStephen(requireContext()).isNullOrEmpty()){
-                        val toast = Toast.makeText(requireContext(), "Que tal si tratas creando libros primero", Toast.LENGTH_LONG)
+                        val toast = Toast.makeText(requireContext(), "Que tal si tratas creando libros de todos los escritores para que tengas variedad", Toast.LENGTH_LONG)
                         toast.setGravity(Gravity.TOP, 0, 140)
                         toast.show()
                         val fragment_LogIn = LogIn()
@@ -227,8 +227,31 @@ class Fragment_Lector : Fragment() {
                 }
 
             }
+
+            imgv_PortadaenLector.setOnClickListener {
+                if (arregloTodosLibros!![j] == null){
+                    val toast = Toast.makeText(requireContext(), "Elige un libro primero", Toast.LENGTH_LONG)
+                    toast.setGravity(Gravity.TOP, 0, 140)
+                    toast.show()
+                }else {
+                    var libroMoreInfo: Libro? = Libro(
+                        arregloTodosLibros!![j].descripcion,
+                        arregloTodosLibros!![j].portada,
+                        arregloTodosLibros!![j].titulo, arregloTodosLibros!![j].fav)
+                    var jsonMoreInfo = gson.toJson(libroMoreInfo)
+                    val Fragment_MoreInfo = Fragment_MoreInfo()
+                    val transaccion: FragmentTransaction = requireFragmentManager().beginTransaction()
+                    val bundle = Bundle()
+                    bundle.putString("ObjMoreInfo", jsonMoreInfo)
+                    bundle.putInt("id", idLectores)
+                    Fragment_MoreInfo.arguments = bundle
+                    transaccion.replace(R.id.mainActivity, Fragment_MoreInfo).addToBackStack(null)
+                    transaccion.commit()
+                }
+            }
         }
     }
+
     fun saveFavSheldon(json:String, fav:Int){
             val pref = PreferenceManager.getDefaultSharedPreferences(requireContext())
             val editor = pref.edit()
