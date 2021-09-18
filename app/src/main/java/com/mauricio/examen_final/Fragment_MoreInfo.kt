@@ -1,5 +1,6 @@
 package com.mauricio.examen_final
 
+import android.media.MediaPlayer
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -36,6 +37,7 @@ class Fragment_MoreInfo : Fragment() {
             val Fragment_LogIn = LogIn()
             val transaccion: FragmentTransaction = requireFragmentManager().beginTransaction()
             transaccion.replace(R.id.mainActivity, Fragment_LogIn).addToBackStack(null)
+            MediaPlayer.create(requireContext(), R.raw.itsatrap).start()
             transaccion.commit()
         }
     }

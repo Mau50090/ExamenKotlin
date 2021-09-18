@@ -1,5 +1,6 @@
 package com.mauricio.examen_final
 
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -139,6 +140,7 @@ class LogIn : Fragment() {
                 println("Se logueo " + arregloLectores[2].userName)
 
             }
+            MediaPlayer.create(requireContext(), R.raw.wow).start()
         }
             return v
         }

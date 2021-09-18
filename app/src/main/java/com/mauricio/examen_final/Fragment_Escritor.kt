@@ -150,6 +150,7 @@ class Fragment_Escritor : Fragment() {
                 txt_Escritor.text = arregloEscritores[1].userName
 
                 if(memoria.loadKafka(requireContext()) != null) {
+
                     btn_EscritorMas.setOnClickListener {
                         j++
                         if(j  > memoria.loadKafka(requireContext())!!.lastIndex){j=0}
@@ -191,6 +192,43 @@ class Fragment_Escritor : Fragment() {
                             txtv_TituloEscritor.text = memoria.loadStant(requireContext())!![j].titulo
                         }
                     }
+                }
+            }
+            btn_MandarActualizar.setOnClickListener {
+
+                if (idescritor == 0){
+                    val jsonActualizar = gson.toJson(memoria.loadStephen(requireContext())!![j])
+                    val Fragment_Edit = Fragment_Edit()
+                    val bundle = Bundle()
+                    bundle.putString("ActuaStephen", jsonActualizar)
+                    bundle.putInt("IdActualizar", 0)
+                    bundle.putInt("Posicion", j)
+                    Fragment_Edit.arguments = bundle
+                    val transaccion: FragmentTransaction = requireFragmentManager().beginTransaction()
+                    transaccion.replace(R.id.mainActivity, Fragment_Edit).addToBackStack(null)
+                    transaccion.commit()
+                }else if(idescritor == 1){
+                    val Fragment_Edit = Fragment_Edit()
+                    val bundle = Bundle()
+                    val jsonActualizar = gson.toJson(memoria.loadKafka(requireContext())!![j])
+                    bundle.putString("ActuaKafka", jsonActualizar)
+                    bundle.putInt("IdActualizar", 1)
+                    bundle.putInt("Posicion", j)
+                    Fragment_Edit.arguments = bundle
+                    val transaccion: FragmentTransaction = requireFragmentManager().beginTransaction()
+                    transaccion.replace(R.id.mainActivity, Fragment_Edit).addToBackStack(null)
+                    transaccion.commit()
+                }else if (idescritor == 2){
+                    val Fragment_Edit = Fragment_Edit()
+                    val bundle = Bundle()
+                    val jsonActualizar = gson.toJson(memoria.loadStant(requireContext())!![j])
+                    bundle.putString("ActuaStan", jsonActualizar)
+                    bundle.putInt("IdActualizar", 2)
+                    bundle.putInt("Posicion", j)
+                    Fragment_Edit.arguments = bundle
+                    val transaccion: FragmentTransaction = requireFragmentManager().beginTransaction()
+                    transaccion.replace(R.id.mainActivity, Fragment_Edit).addToBackStack(null)
+                    transaccion.commit()
                 }
             }
         }
