@@ -121,21 +121,21 @@ class LogIn : Fragment() {
 
                 bundle.putInt("numLec", arregloLectores[0].id)
                 fragment_Lector.arguments = bundle
-                transaccionEsc.commit()
+                transaccionLec.commit()
                 println("Se logueo " + arregloLectores[0].userName)
 
             }else if (tex1.text.toString() == arregloLectores[1].userName && tex2.text.toString() == arregloLectores[1].password) {
 
                 bundle.putInt("numLec", arregloLectores[1].id)
                 fragment_Lector.arguments = bundle
-                transaccionEsc.commit()
+                transaccionLec.commit()
                 println("Se logueo " + arregloLectores[1].userName)
 
             }else if (tex1.text.toString() == arregloLectores[2].userName && tex2.text.toString() == arregloLectores[2].password) {
 
                 bundle.putInt("numLec", arregloLectores[2].id)
                 fragment_Lector.arguments = bundle
-                transaccionEsc.commit()
+                transaccionLec.commit()
                 println("Se logueo " + arregloLectores[2].userName)
 
             }

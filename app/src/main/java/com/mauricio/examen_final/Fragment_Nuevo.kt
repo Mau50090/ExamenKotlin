@@ -86,15 +86,15 @@ class Fragment_Nuevo : Fragment() {
             bundle.putInt("LibroNuevo", idDelEscritor)
 
             if (idDelEscritor == 0){
-                val libroNuevo :LibroStephen = LibroStephen(txtDescripcion.text.toString(), arregloPortadas[i], txtTitulo.text.toString())
+                val libroNuevo :Libro = Libro(txtDescripcion.text.toString(), arregloPortadas[i], txtTitulo.text.toString())
                 val jsonStephen:String = gson.toJson(libroNuevo)
                 bundle.putString("LibroStephen", jsonStephen)
             }else if (idDelEscritor == 1){
-                val libroNuevo :LibroKafka = LibroKafka(txtDescripcion.text.toString(), arregloPortadas[i], txtTitulo.text.toString())
+                val libroNuevo :Libro = Libro(txtDescripcion.text.toString(), arregloPortadas[i], txtTitulo.text.toString())
                 val jsonKafka:String = gson.toJson(libroNuevo)
                 bundle.putString("LibroKafka", jsonKafka)
             }else if(idDelEscritor == 2){
-                val libroNuevo :LibroStan = LibroStan(txtDescripcion.text.toString(), arregloPortadas[i], txtTitulo.text.toString())
+                val libroNuevo :Libro = Libro(txtDescripcion.text.toString(), arregloPortadas[i], txtTitulo.text.toString())
                 val jsonStan:String = gson.toJson(libroNuevo)
                 bundle.putString("LibroStan", jsonStan)
             }

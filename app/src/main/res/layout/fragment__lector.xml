@@ -44,7 +44,7 @@
         app:layout_constraintVertical_bias="0.116" />
 
     <TextView
-        android:id="@+id/textView8"
+        android:id="@+id/txtv_NumFav"
         android:layout_width="215dp"
         android:layout_height="25dp"
         android:layout_marginStart="32dp"
@@ -56,7 +56,7 @@
         app:layout_constraintVertical_bias="0.185" />
 
     <ImageView
-        android:id="@+id/imageView5"
+        android:id="@+id/imgv_PortadaenLector"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -68,7 +68,7 @@
         tools:src="@tools:sample/avatars" />
 
     <Button
-        android:id="@+id/button5"
+        android:id="@+id/btn_MenosLector"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="-"
@@ -80,7 +80,7 @@
         app:layout_constraintVertical_bias="0.584" />
 
     <Button
-        android:id="@+id/button6"
+        android:id="@+id/btn_MasLector"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="+"
@@ -92,15 +92,15 @@
         app:layout_constraintVertical_bias="0.584" />
 
     <TextView
-        android:id="@+id/textView10"
+        android:id="@+id/txtv_TituloLectores"
         android:layout_width="139dp"
         android:layout_height="22dp"
         android:layout_marginStart="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/button6"
+        app:layout_constraintEnd_toStartOf="@+id/btn_MasLector"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/button5"
-        app:layout_constraintTop_toBottomOf="@+id/imageView5"
+        app:layout_constraintStart_toEndOf="@+id/btn_MenosLector"
+        app:layout_constraintTop_toBottomOf="@+id/imgv_PortadaenLector"
         app:layout_constraintVertical_bias="0.094" />
 
     <ImageView
@@ -110,7 +110,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView10"
-        app:layout_constraintVertical_bias="0.238"
+        app:layout_constraintTop_toBottomOf="@+id/txtv_TituloLectores"
+        app:layout_constraintVertical_bias="0.382"
         tools:src="@tools:sample/avatars" />
 </androidx.constraintlayout.widget.ConstraintLayout>
